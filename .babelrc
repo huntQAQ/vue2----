@@ -1,0 +1,6 @@
+// 用来解析文件的
+{
+    "presets": [  // 预解析
+        "@babel/prest-env"
+    ]
+}
