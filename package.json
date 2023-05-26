@@ -1,4 +1,13 @@
 {
+  "name": "2023-Vue",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+   "dev": "rollup -c -w" 
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
   "description": "",
   "devDependencies": {
     "@babel/core": "^7.21.8",
