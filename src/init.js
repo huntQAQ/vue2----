@@ -7,7 +7,7 @@ export function initMixin(Vue){
         let vm = this
         vm.$options = options  // 给vm实例的options属性赋值options
         // 初始化状态
-        initState(vm)
+        initState(vm);
     }
 }
 

@@ -1,3 +1,5 @@
+import ArrayMethods from "./arr"
+
 // observer方法传入的参数是一个对象，这个对象就是需要进行数据劫持的对象。
 export function observer(data){
     // 判断data数据
@@ -16,7 +18,13 @@ class Observer{
 		// 判断是否为数组
 		// console.log(value)
 		if(Array.isArray(value)){
-			console.log('数组')
+			// 这段代码给一个名为value的对象设置了一个名为__proto__的属性，将其指向了一个名为ArrayMethods的对象。
+			// 这意味着当在value上调用数组方法时，它会先在value上查找是否有这个方法，
+			// 如果没有，就会到ArrayMethods上查找并执行相应的方法。
+			// 这样做可以实现从一个普通的对象继承数组的方法，使其看起来像一个数组对象。
+			value.__proto__ = ArrayMethods
+			// 如果value是数组对象
+			this.observerArray(value)
 		} else {
 			this.walk(value)  // 遍历
 		}
@@ -32,13 +40,19 @@ class Observer{
             defineReactive(data, key, value)
         }
     }
+	observerArray(value){
+		for(let i = 0; i < value.length; i++){
+			observer(value[i])
+		}
+	}
 }
 // 对对象中的属性进行劫持
 // Object.defineProperty 方法会给当前属性添加 getter 和 setter。
 // getter 主要用来收集依赖，
 // setter 主要用来在属性发生变化时自动触发更新，从而实现响应式的特性。
+// Object.defineProperty 有一个缺点只能对对象中的一个属性进行劫持
 function defineReactive(data, key, value){
-    observer(value) // 深度代理
+    observer(value) // 深度代理，递归
     Object.defineProperty(data, key, {
         get(){
             console.log('获取')
@@ -47,7 +61,7 @@ function defineReactive(data, key, value){
         set(newValue){
             console.log('设置')
             if(newValue == value) return;
-            observer(newValue) // 如果用户设置的值是对象
+            observer(newValue) // 如果用户设置的值是对象，又进行一次递归
             value = newValue
         }
     })
